@@ -278,7 +278,7 @@ function toPairs(obj) {
     for (var key in obj) {
 
       var value = obj[key];
-      
+
       var arr2 = [];
       arr2[0] = key;
       arr2[1] = value;
@@ -297,10 +297,6 @@ function toPairs(obj) {
 // argument. For example, given [['a', 1], ['b', 2]], then return
 // { a: 1, b: 2 }.
 function fromPairs(arr) {
-  var object = new Object();
+  return Object.assign({}, ...arr.map(([key, value]) => ({[key]: value})));
 
-  for (i=0; i<arr.length; i++) {
-    object[arr[i][0]] = arr[i][1];
-  }
-  return object;
 }
