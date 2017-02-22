@@ -1,302 +1,221 @@
-// Define a function named sum that takes in one argument.
-//    arr (array of numbers)
+// Define a function named hasClass that takes in two arguments.
+//   element   (Any DOM element)
+//   className (String)
 //
-// Return the sum of all of the numbers in the array. For example, given
-// [1, 2, 3, 4], then return 10. If the array is empty, return 0.
-function sum(arr) {
-  // var sum = 0;
-  var sum=0;
-  for (var i = 0; i < arr.length; i++) {
-  sum += arr[i];
+// The function will return true if the element has the specified className CSS
+// class applied.
+  function hasClass(element, className) {
+    return $(element).hasClass(className)
   }
-  //
-  return sum;
+
+
+// Define a function named toggleVisible that takes in one argument.
+//   div (<div> DOM element)
+//
+// The function will add the 'visible' class to the div if it does not currently
+// have it. It removes the class if it already exists.
+
+function toggleVisible(div) {
+  return $(div).toggleClass('visible')
 }
 
-// Define a function named product that takes in one argument.
-//    arr (array of numbers)
+
+// Define a function named hideConfidentialText that takes in one argument.
+//   article (<article> DOM element)
+// Assume the article contains at least one paragraph.
 //
-// Return the product of all of the numbers in the array. For example, given
-// [1, 2, 3, 4], then return 24. If the array is empty, return 1.
-function product(arr) {
-  var product=1;
-  for (i=0; i<arr.length; i++) {
-    product *= arr[i];
-  }
-  return product;
+// The function will hide any child paragraphs of article if anywhere the text contains
+// "CONFIDENTIAL"
+function hideConfidentialText(article) {
+  return $(article).children("p:contains('CONFIDENTIAL')").hide()
 }
 
-// Define a function named concatenate that takes in one argument.
-//    arr (array of strings)
+// Define a function named checkAll that takes in one argument
+//   checkbox (<input type="checkbox"> DOM element).
 //
-// Return the concatenation of all the strings in the array. For example, given
-// ['hello', 'my', 'name', 'is', 'ken'], then return 'hellomynameisken'. If the
-// array is empty, return ''.
-function concatenate(arr) {
-var joined = "";
-for (i=0; i<arr.length; i++) {
-  joined = arr.join("");
-}
-return joined;
+// The function will mark all sibling checkboxes, of the input checkbox, as "checked" if the input checkbox
+// is marked as "checked".
+function checkAll(checkbox) {
+  return $(checkbox).siblings(":checkbox").prop("checked", checkbox.checked)
 }
 
-// Define a function named repeat that takes in two arguments.
-//     str (string)
-//     times (number)
+
+// Define a function named updateTodoList that takes one argument.
+//   todoList (<ul> DOM element)
 //
-// Return a new string containing times copies of the input str. For example,
-// given 'hi' and 4, then return 'hihihihi'.
-function repeat(str, times) {
-  var newStr = "";
-  for (i=0; i<times;i++){
-      newStr += str;
-  }
-  return newStr;
+// The function must iterate over its list items (<li>) and do the following:
+//   * Remove items from the list if its text starts with "COMPLETED"
+//   * Applies the "important" CSS class if its text starts with "URGENT".
+//     TIP: Applying a CSS class means adding on top of what's already there.
+//   * Make no change otherwise.
+function updateTodoList(todoList) {
+  $(todoList).children('li:contains("COMPLETED")').remove(); $(todoList).children('li:contains("URGENT")').addClass("important")
 }
 
-// Define a function named filterPassingGrades that takes in one argument.
-//     grades (array of numbers)
+
+// Define a function named createList that takes one argument.
+//   sites (object)
 //
-// Return a new array with any grade less than 70 filtered out. For example,
-// given [88, 67, 70, 92, 53], then return [88, 70, 92].
-function filterPassingGrades(grades) {
-  var passed = [];
-  for (i=0; i<grades.length; i++) {
-    if (grades[i] >= 70) {
-      passed.push(grades[i]);
+// The object has the following structure:
+//    {
+//      'TITLE': 'URL',
+//      'TITLE': 'URL',
+//      'TITLE': 'URL',
+//      ...
+//    }
+//
+// The function must return an <ul> element that contains <li> elements that
+// each contain an <a> element. For example, given:
+//    {
+//      'Google': 'https://www.google.com',
+//      'Facebook': 'https://www.facebook.com',
+//      'GitHub': 'https://github.com',
+//      'Galvanize': 'https://www.galvanize.com'
+//    }
+//
+// It returns the following:
+//    <ul>
+//      <li><a href="https://www.google.com">Google</a></li>
+//      <li><a href="https://www.facebook.com">Facebook</a></li>
+//      <li><a href="https://github.com">GitHub</a></li>
+//      <li><a href="https://www.galvanize.com">Galvanize</a></li>
+//    </ul>
+function createList(sites) {
+  var ul = $('<ul></ul>');
+  $.each(sites, function(key, value) {
+      ul.append($('<li></li').append($('<a></a>').attr('href',value).text(key)))
+      console.log(ul)
+  })
+  return ul[0]
+}
+
+
+
+
+// Write a function named extractQuote that takes in one argument.
+//   article (<article> DOM element)
+//
+// Assume the article contains a paragraph. For example:
+//
+//    <article>
+//      <p>Neale Donald Walsch once said, "Life begins at the end of your
+//      comfort zone." This is really important.</p>
+//    </article>
+//
+// The function must check the paragraph for double quotes ("), extract it out,
+// add it to the text of a <blockquote> element, and then replace the paragraph
+// with that blockquote. For example, given the  above input, it must change the
+// article as following:
+//
+//    <article>
+//      <blockquote>"Life begins at the end of your comfort zone."</blockquote>
+//    </article>
+//
+// No changes should be made if there's no quote.
+//
+// TIP: Assume that if there's an opening double quote, there's a closing
+// double quote as well.
+  function extractQuote(article) {
+    let oldP = $(article).children('p').first();
+    let quote1 = oldP.text().indexOf('"');
+    let quote2 = oldP.text().lastIndexOf('"');
+    let fullQuote = oldP.text().substring(quote1, quote2+1);
+    let block = $('<blockquote>').text(fullQuote);
+
+    if (quote1 >= 0) {
+      oldP.replaceWith(block)
     }
   }
-  return passed;
-}
 
-
-
-// Define a function named replace that takes in three arguments.
-//    arr (array of numbers)
-//    from (number)
-//    to (number)
+// Define a function named createTable that takes one argument.
+//   data (array of arrays)
 //
-// Return a new array of numbers where all from elements are replaced with to.
-// For example, given [1, 3, 2, 1, 3], 1, and 4, then return [4, 3, 2, 4, 3].
-function replace(arr, from, to) {
-  for (i=0;i<arr.length; i++) {
-    if (arr[i] === from) {
-        arr.splice(i, 1, to)
+// The function must return a <table> DOM element that matches the structure of
+// the input data. The first element in the data array is the <thead> data, the
+// last element is the <tfoot> data, and the remaining elements form the <tbody>
+// data. For example, given the following input:
+//    [
+//      ['a', 'b', 'c'],
+//      ['d', 'e', 'f'],
+//      ['g', 'h', 'i'],
+//      ['j', 'k', 'l']
+//    ]
+//
+// the function returns
+//
+// <table>
+//   <thead>
+//     <tr>
+//       <th>a</th>
+//       <th>b</th>
+//       <th>c</th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     <tr>
+//       <td>d</td>
+//       <td>e</td>
+//       <td>f</td>
+//     </tr>
+//     <tr>
+//       <td>g</td>
+//       <td>h</td>
+//       <td>i</td>
+//     </tr>
+//   </tbody>
+//   <tfoot>
+//     <tr>
+//       <td>j</td>
+//       <td>k</td>
+//       <td>l</td>
+//     </tr>
+//   </tfoot>
+// </table>
+//
+// TIP: Assume that data array has at least three elements.
+// TIP: Assume that the elements of the data array are equal in length.
+function createTable(data) {
+  let table = $('<table>');
+  let head = $('<thead>');
+  let body = $('<tbody>');
+  let foot = $('<tfoot>');
+
+  table.append(head);
+  table.append(body);
+  table.append(foot);
+
+  let top = data[0];
+  let bottom = data[data.length-1]
+
+  for (var i = 0; i < data.length; i++) {
+    let row = data[i];
+    if (row === top) {
+      let tr = $('<tr>');
+      head.append(tr);
+      for (var letter of row) {
+        let th = $('<th>');
+        tr.append(th);
+        th.text(letter);
+      }
+    }
+    else if (row === bottom) {
+      let tr = $('<tr>');
+      foot.append(tr);
+      for (var letter of row) {
+        let td = $('<td>');
+        tr.append(td);
+        td.text(letter);
+      }
+    }
+    else {
+      let tr = $('<tr>');
+      body.append(tr);
+      for (var letter of row) {
+        let td = $('<td>');
+        tr.append(td);
+        td.text(letter);
+      }
     }
   }
-  return arr;
-
-}
-
-
-
-// Define a function named flatten that takes in one argument.
-//     arr (array of arrays)
-//
-// Return a new array that combines all of elements of each inner array. For
-// example, given [[1], [2, 3], [4]], then return [1, 2, 3, 4].
-//
-// Tip: You only need to flatten one level deep.
-//
-// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat
-function flatten(arr) {
-  var newArr = [].concat.apply( [],arr);
-  return newArr;
-}
-
-
-// Define a function named max that takes in one argument.
-//    arr (array of numbers)
-//
-// Return the maximum number in the array. For example, given [1, 2, -3, 4],
-// then return 4. If the array is empty, return -Infinity.
-//
-// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max
-function max(arr) {
-  var newMax = Math.max.apply(null, arr);
-  return newMax;
-}
-
-
-
-// Define a function named min that takes in one argument.
-//    arr (array of numbers)
-//
-// Return the minimum number in the array. For example, given [1, 2, -3, 4],
-// then return -3. If the array is empty, return Infinity.
-//
-// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/min
-function min(arr) {
-  var newMin = Math.min.apply(null, arr);
-  return newMin;
-}
-
-
-
-// Define a function named mean that takes in one argument.
-//    arr (array of numbers)
-//
-// Return the mean (i.e. average) of all of the numbers in the array. For
-// example, given [1, 2, 6], then return 3. If the array is empty, return null.
-function mean(arr) {
-  var total = 0;
-  var average = 0;
-
-  if (arr.length === 0) {
-    return null;
-  }
-  else {
-  for (i=0; i<arr.length;i++) {
-    total += arr[i];
-    average = (total/arr.length);
-  }
-  return average;
-}
-}
-
-
-// Define a function named median that takes in one argument.
-//    arr (array of numbers)
-//
-// Return the median of all of the numbers. For example, given [1, 2, 6], then
-// return 2. Also, if given [1, 2, 6, 8], return 4. If the array is empty,
-// return null.
-//
-// Tip: Use Google to learn more about calculating the median.
-// Tip: The given array may not be sorted.
-//
-// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-function median(arr) {
-  var sor = arr.sort(function(a,b) {
-    return a-b;
-  });
-  var middle = 0;
-  if (sor.length === 0) {
-    return null;
-  }
-  else {
-    var half = Math.floor(sor.length/2);
-  if (sor.length % 2) {
-    return sor[half];
-  }
-  else {
-    return (sor[half-1]+sor[half])/2;
-  }
-  }
-}
-
-
-// Define a function named contains that takes in two arguments.
-//     arr (array of strings)
-//     str (string)
-//
-// Return true if that string exists in the array, otherwise false.
-function contains(arr, str) {
-  if (arr.includes(str)===true) {
-    return true;
-  }
-  else {
-    return false;
-  }
-
-}
-
-
-
-// Define a function named distance that takes in two arguments.
-//    point1 (object)
-//    point2 (object)
-//
-// Assume each point argument has the following format.
-//    { x: NUMBER, y: NUMBER }
-//
-// Return the distance between the two points on a Cartesian coordinate system.
-// For example, given { x: 3, y: 2 } and { x: 9, y: 7 }, then return
-// approximately 7.810249675906654.
-//
-// Tip: Use Google to learn more about calculating the distance.
-function distance(point1, point2) {
-  var dist = Math.sqrt(
-    Math.pow((point2.x-point1.x), 2)+Math.pow((point2.y - point1.y), 2))
-    return dist;
-
-}
-
-
-
-// Define a function named combine that takes in two arguments.
-//    obj1 (object)
-//    obj2 (object)
-//
-// Return a new object that has the key-value pairs of both objects. For
-// example, given { a: 1 } and { b: 2 }, then return { a: 1, b: 2 }.
-// If there's a key in more than one object,
-// the latest object to have the key will determine the value. For example,
-// given {c: 3} and {c: 4}, then return {c: 4}.
-function combine(obj1, obj2) {
-for (var i in obj2) {
-    obj1[i]=obj2[i];
-  }
-  return obj1;
-}
-
-
-// Define a function called invert that takes in one argument.
-//    obj (object)
-//
-// Return a new object where the keys and values of the argument are inverted.
-// For example, given { a: 1, b: 2 }, then return { '1': 'a', '2': 'b' }.
-function invert(obj) {
-  var obj2 = {};
-  for (var key in obj) {
-      var val = obj[key];
-      obj2[val] = key;
-  }
-  return obj2;
-}
-
-
-// Define a function named values that takes in one argument.
-//    obj (object)
-//
-// Return an array of the values of the object. For example, given
-// { a: 1, b: 2, c: 3 }, then return [1, 2, 3].
-function values(obj) {
-  return Object.values(obj);
-}
-
-
-
-// Define a function called toPairs that takes in one argument.
-//    obj (object)
-//
-// Return a new array where each element is key-value pair array of the
-// argument. For example, given { a: 1, b: 2 }, then return
-// [['a', 1], ['b', 2]].
-function toPairs(obj) {
-    var arr = [];
-    for (var key in obj) {
-
-      var value = obj[key];
-
-      var arr2 = [];
-      arr2[0] = key;
-      arr2[1] = value;
-      arr.push(arr2);
-    }
-    return arr;
-  }
-
-
-
-
-// Define a function called fromPairs that takes in one argument.
-//    arr (array)
-//
-// Return a new object where each key-value pair is from an element in the
-// argument. For example, given [['a', 1], ['b', 2]], then return
-// { a: 1, b: 2 }.
-function fromPairs(arr) {
-  return Object.assign({}, ...arr.map(([key, value]) => ({[key]: value})));
-
+  return table[0]
 }
